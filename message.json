@@ -1,0 +1,88 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Plivo Message API",
+    "description": "Plivo's Message API allows sending and receiving SMS, MMS, and WhatsApp messages globally.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/v1/Account/{auth_id}/Message/": {
+      "post": {
+        "summary": "Send a Message",
+        "description": "Send SMS, MMS, or WhatsApp messages to destination numbers.",
+        "parameters": [
+          {
+            "name": "auth_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MessageRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Message sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "MessageRequest": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "message_type": {
+            "type": "string",
+            "enum": ["sms", "mms", "whatsapp"]
+          }
+        },
+        "required": ["from", "to", "text", "message_type"]
+      },
+      "MessageResponse": {
+        "type": "object",
+        "properties": {
+          "message_uuid": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "message_state": {
+            "type": "string"
+          },
+          "error_code": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

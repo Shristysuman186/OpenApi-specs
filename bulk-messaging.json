@@ -1,0 +1,95 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Plivo Bulk Messaging API",
+      "version": "1.0",
+      "description": "API for sending bulk messages using Plivo's messaging service."
+    },
+    "paths": {
+      "/v1/Account/{auth_id}/Message/": {
+        "post": {
+          "summary": "Send Bulk Messages",
+          "operationId": "sendBulkMessages",
+          "parameters": [
+            {
+              "name": "auth_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "Your Plivo authentication ID."
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "src": {
+                      "type": "string",
+                      "description": "The sender ID."
+                    },
+                    "dst": {
+                      "type": "string",
+                      "description": "List of destination numbers separated by <. Example: 14156667777<14157778888<14158889999",
+                      "example": "14156667777<14157778888<14158889999"
+                    },
+                    "text": {
+                      "type": "string",
+                      "description": "Message content."
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["sms", "mms", "whatsapp"],
+                      "default": "sms",
+                      "description": "Type of message being sent."
+                    },
+                    "media_urls": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "List of media URLs for MMS messages."
+                    }
+                  },
+                  "required": ["dst", "text"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Bulk message response.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message_uuid": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "description": "List of message UUIDs for valid destination numbers."
+                      },
+                      "invalid_number": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "description": "List of invalid destination numbers."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  

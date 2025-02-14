@@ -1,0 +1,134 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Plivo API",
+      "version": "1.0.0",
+      "description": "API for integrating communications with Plivo. All requests are authenticated using BasicAuth with AUTH ID and AUTH TOKEN."
+    },
+    "servers": [
+      {
+        "url": "https://api.plivo.com/{version}/",
+        "variables": {
+          "version": {
+            "default": "v1"
+          }
+        }
+      }
+    ],
+    "paths": {
+      "/message": {
+        "post": {
+          "summary": "Send a message",
+          "operationId": "sendMessage",
+          "security": [{ "basicAuth": [] }],
+          "requestBody": {
+            "description": "Message payload",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "src": { "type": "string", "description": "Sender number" },
+                    "dst": { "type": "string", "description": "Receiver number" },
+                    "text": { "type": "string", "description": "Message content" },
+                    "callback_url": { "type": "string", "description": "URL for asynchronous response" },
+                    "callback_method": {
+                      "type": "string",
+                      "enum": ["GET", "POST"],
+                      "default": "POST",
+                      "description": "Method used for callback notification"
+                    }
+                  },
+                  "required": ["src", "dst", "text"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Message sent successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "api_id": { "type": "string" },
+                      "message": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            },
+            "400": { "$ref": "#/components/responses/BadRequest" },
+            "401": { "$ref": "#/components/responses/Unauthorized" },
+            "429": { "$ref": "#/components/responses/TooManyRequests" },
+            "500": { "$ref": "#/components/responses/ServerError" }
+          }
+        }
+      }
+    },
+    "components": {
+      "securitySchemes": {
+        "basicAuth": {
+          "type": "http",
+          "scheme": "basic"
+        }
+      },
+      "responses": {
+        "BadRequest": {
+          "description": "A parameter is missing or invalid",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "Unauthorized": {
+          "description": "Authentication failed",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "TooManyRequests": {
+          "description": "Too many requests sent",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "ServerError": {
+          "description": "Internal server error",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  

@@ -1,0 +1,157 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Plivo Messaging API",
+      "version": "1.0",
+      "description": "API for retrieving a list of Message Detail Records (MDR)."
+    },
+    "paths": {
+      "/v1/Account/{auth_id}/Message/": {
+        "get": {
+          "summary": "List all messages",
+          "description": "Retrieves a list of Message Detail Records (MDR) based on a filter criteria over the last 90 days.",
+          "parameters": [
+            {
+              "name": "auth_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "subaccount",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "message_direction",
+              "in": "query",
+              "schema": {
+                "type": "string",
+                "enum": ["inbound", "outbound"]
+              }
+            },
+            {
+              "name": "message_time",
+              "in": "query",
+              "schema": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            {
+              "name": "message_state",
+              "in": "query",
+              "schema": {
+                "type": "string",
+                "enum": ["queued", "sent", "failed", "delivered", "undelivered", "received", "rejected"]
+              }
+            },
+            {
+              "name": "message_type",
+              "in": "query",
+              "schema": {
+                "type": "string",
+                "enum": ["sms", "mms", "whatsapp"]
+              }
+            },
+            {
+              "name": "error_code",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "powerpack_id",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "from_number",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "to_number",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "limit",
+              "in": "query",
+              "schema": {
+                "type": "integer",
+                "default": 20,
+                "maximum": 20
+              }
+            },
+            {
+              "name": "offset",
+              "in": "query",
+              "schema": {
+                "type": "integer",
+                "default": 0
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "A list of Message Detail Records",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "meta": {
+                        "type": "object",
+                        "properties": {
+                          "limit": { "type": "integer" },
+                          "offset": { "type": "integer" },
+                          "next": { "type": "string", "nullable": true },
+                          "previous": { "type": "string", "nullable": true }
+                        }
+                      },
+                      "objects": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/MessageDetailRecord"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "MessageDetailRecord": {
+          "type": "object",
+          "properties": {
+            "message_uuid": { "type": "string" },
+            "message_time": { "type": "string", "format": "date-time" },
+            "message_direction": { "type": "string" },
+            "message_state": { "type": "string" },
+            "message_type": { "type": "string" },
+            "from_number": { "type": "string" },
+            "to_number": { "type": "string" },
+            "destination_country_iso2": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+  

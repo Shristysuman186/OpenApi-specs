@@ -1,0 +1,103 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Plivo Messaging API",
+      "version": "1.0.0",
+      "description": "Retrieve a Message Detail Record (MDR) from Plivo."
+    },
+    "paths": {
+      "/v1/Account/{auth_id}/Message/{message_uuid}/": {
+        "get": {
+          "summary": "Retrieve a Message",
+          "description": "Fetches a Message Detail Record (MDR) using the specified message_uuid.",
+          "operationId": "retrieveMessage",
+          "parameters": [
+            {
+              "name": "auth_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "Your Plivo account authentication ID."
+            },
+            {
+              "name": "message_uuid",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "The unique identifier of the message to retrieve."
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Message detail record retrieved successfully.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/MessageDetailRecord"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Message not found."
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "MessageDetailRecord": {
+          "type": "object",
+          "properties": {
+            "message_uuid": {
+              "type": "string",
+              "description": "A 36-character string that uniquely identifies a message."
+            },
+            "message_time": {
+              "type": "string",
+              "description": "Timestamp of when the message was sent or received."
+            },
+            "message_direction": {
+              "type": "string",
+              "enum": ["inbound", "outbound"],
+              "description": "Direction of the message."
+            },
+            "message_state": {
+              "type": "string",
+              "description": "Current state of the message."
+            },
+            "message_type": {
+              "type": "string",
+              "description": "Type of the message (SMS, MMS, WhatsApp)."
+            },
+            "from_number": {
+              "type": "string",
+              "description": "Sender of the message."
+            },
+            "to_number": {
+              "type": "string",
+              "description": "Recipient of the message."
+            },
+            "total_rate": {
+              "type": "string",
+              "description": "Charge per unit of the message."
+            },
+            "total_amount": {
+              "type": "string",
+              "description": "Total charge for the message."
+            },
+            "error_code": {
+              "type": "string",
+              "description": "Error code for message failure."
+            }
+          }
+        }
+      }
+    }
+  }
+  
