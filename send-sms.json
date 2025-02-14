@@ -1,0 +1,76 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Plivo Messaging API",
+      "version": "1.0.0",
+      "description": "API for sending SMS, MMS, and WhatsApp messages via Plivo."
+    },
+    "paths": {
+      "/v1/Account/{auth_id}/Message/": {
+        "post": {
+          "summary": "Send a message",
+          "description": "Send SMS, MMS, or WhatsApp messages via Plivo.",
+          "parameters": [
+            {
+              "name": "auth_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "src": { "type": "string" },
+                    "powerpack_uuid": { "type": "string" },
+                    "dst": { "type": "string", "description": "Comma-separated list of destination numbers" },
+                    "text": { "type": "string" },
+                    "type": { "type": "string", "enum": ["sms", "mms", "whatsapp"], "default": "sms" },
+                    "media_urls": { "type": "array", "items": { "type": "string" } },
+                    "template": { "type": "object" },
+                    "interactive": { "type": "object" },
+                    "location": { "type": "object" },
+                    "message_expiry": { "type": "integer", "default": 10800 },
+                    "url": { "type": "string" },
+                    "dlt_entity_id": { "type": "string" },
+                    "dlt_template_id": { "type": "string" },
+                    "dlt_template_category": { "type": "string", "enum": ["transactional", "promotional", "service_implicit", "service_explicit"] },
+                    "method": { "type": "string", "enum": ["GET", "POST"], "default": "POST" },
+                    "trackable": { "type": "boolean", "default": false },
+                    "log": { "type": "string", "enum": ["true", "false", "content_only", "number_only"], "default": "true" }
+                  },
+                  "required": ["dst"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Message sent successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "api_id": { "type": "string" },
+                      "message_uuid": { "type": "array", "items": { "type": "string" } }
+                    }
+                  }
+                }
+              }
+            },
+            "400": { "description": "Invalid request" },
+            "401": { "description": "Unauthorized" },
+            "500": { "description": "Internal server error" }
+          }
+        }
+      }
+    }
+  }
+  
